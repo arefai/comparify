@@ -38,6 +38,10 @@ var app = express();
 app.use(express.static(__dirname + '/public'))
    .use(cookieParser());
 
+app.set('views', __dirname + '/public');
+app.set('view engine', 'ejs');
+app.engine('html', require('ejs').renderFile);
+
 app.get('/login', function(req, res) {
 
   var state = generateRandomString(16);
@@ -99,16 +103,25 @@ app.get('/callback', function(req, res) {
         // use the access token to access the Spotify Web API
         request.get(options, function(error, response, body) {
           console.log(body);
-          console.log(error);
-          console.log(response);
+          var popularityAvg = 0;
+          var count = 0;
+          for (item in body.items) {
+              console.log(body.items[item]);
+              popularityAvg += parseInt(body.items[item].popularity);
+              count++;
+          }
+          console.log("Popularity Avg: ");
+          console.log(popularityAvg / count);
         });
 
         // we can also pass the token to the browser to make requests from there
-        res.redirect('/#' +
-          querystring.stringify({
-            access_token: access_token,
-            refresh_token: refresh_token
-          }));
+
+        // res.redirect('/#' +
+        //   querystring.stringify({
+        //     access_token: access_token,
+        //     refresh_token: refresh_token
+        //   }));
+        res.render('stat.html', {message: "Hello World"});
       } else {
         res.redirect('/#' +
           querystring.stringify({
