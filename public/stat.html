@@ -11,7 +11,23 @@
     </nav>
 </head>
 <body class="bg-light">
-    <%= message %>
+    <div class="pagination-centered">
+        <h5>Your Stats</h5>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm">Popularity Scale (out of 100)</div>
+                <div class="col-sm"><%= popularity %></div>
+            </div>
+            <div class="container">
+                <div class="col-sm">Top Track that was Most Popular</div>
+                <div class="col-sm"><%= mostPopularTrack %> by <%= mostPopularTrackArtist %></div>
+            </div>
+            <div class="container">
+                <div class="col-sm">Top Track that was Least Popular</div>
+                <div class="col-sm"><%= leastPopularTrack %> by <%= leastPopularTrackArtist %></div>
+            </div>            
+        </div>
+    </div>
 </body>
 
 </html>

@@ -60,22 +60,49 @@ app.get('/login', function(req, res) {
 });
 var sum = 0;
 var total = 0;
-function iterateTopTracks(error, response, body, options) {
-  //console.log(body);
-  
-  for (x in body.items) {
-    //console.log(body.items[x].popularity);
-    sum += body.items[x].popularity;
-  }
-  options.url = body.next;
-  total = body.total;
-  if (options.url){
+var popularity = 0;
+var mostPopularTrackName;
+var mostPopularTrackPop = 0;
+var mostPopularTrackArtist;
+
+var leastPopularTrackName;
+var leastPopularTrackPop = 100;
+var leastPopularTrackArtist;
+
+function iterateTopTracks(options, res) {
+  if (options.url) {
     request.get(options, function(error, respose, body) {
-      iterateTopTracks(error, response, body, options);
+        console.log(options.url);
+        for (x in body.items) {
+          //console.log(body.items[x].popularity);
+          sum += body.items[x].popularity;
+          total += 1;
+          if (body.items[x].popularity > mostPopularTrackPop) {
+            mostPopularTrackName = body.items[x].name;
+            mostPopularTrackArtist = body.items[x].artists[0].name;
+            mostPopularTrackPop = body.items[x].popularity;
+          }
+
+          if (body.items[x].popularity < leastPopularTrackPop) {
+            leastPopularTrackName = body.items[x].name;
+            leastPopularTrackArtist = body.items[x].artists[0].name;
+            leastPopularTrackPop = body.items[x].popularity;
+          }
+        }  
+        options.url = body.next;
+        iterateTopTracks(options, res)
     });
   }
   else {
-    console.log("average popularity: " + (sum/total));
+    popularity =  sum / total;
+    res.render('stat.html', {
+      popularity: popularity,
+      mostPopularTrack : mostPopularTrackName,
+      mostPopularTrackArtist : mostPopularTrackArtist,
+      leastPopularTrack : leastPopularTrackName, 
+      leastPopularTrackArtist : leastPopularTrackArtist
+    });
+    console.log(popularity);
   }
 }
 
@@ -121,10 +148,7 @@ app.get('/callback', function(req, res) {
             json: true
           };
 
-          // use the access token to access the Spotify Web API
-          request.get(options, function(error, respose, body) {
-            iterateTopTracks(error, response, body, options);
-          });
+          iterateTopTracks(options, res);
         // we can also pass the token to the browser to make requests from there
 
         // res.redirect('/#' +
@@ -132,7 +156,6 @@ app.get('/callback', function(req, res) {
         //     access_token: access_token,
         //     refresh_token: refresh_token
         //   }));
-        res.render('stat.html', {message: "Hello World"});
       } else {
         res.redirect('/#' +
           querystring.stringify({
