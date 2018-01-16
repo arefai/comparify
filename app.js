@@ -58,6 +58,26 @@ app.get('/login', function(req, res) {
       state: state
     }));
 });
+var sum = 0;
+var total = 0;
+function iterateTopTracks(error, response, body, options) {
+  //console.log(body);
+  
+  for (x in body.items) {
+    //console.log(body.items[x].popularity);
+    sum += body.items[x].popularity;
+  }
+  options.url = body.next;
+  total = body.total;
+  if (options.url){
+    request.get(options, function(error, respose, body) {
+      iterateTopTracks(error, response, body, options);
+    });
+  }
+  else {
+    console.log("average popularity: " + (sum/total));
+  }
+}
 
 app.get('/callback', function(req, res) {
 
@@ -93,27 +113,18 @@ app.get('/callback', function(req, res) {
 
         var access_token = body.access_token,
             refresh_token = body.refresh_token;
+        
+        //for (var y = 0; y < 1000; y += 50){
+          var options = {
+            url: 'https://api.spotify.com/v1/me/top/tracks',
+            headers: { 'Authorization': 'Bearer ' + access_token },
+            json: true
+          };
 
-        var options = {
-          url: 'https://api.spotify.com/v1/me/top/tracks',
-          headers: { 'Authorization': 'Bearer ' + access_token },
-          json: true
-        };
-
-        // use the access token to access the Spotify Web API
-        request.get(options, function(error, response, body) {
-          console.log(body);
-          var popularityAvg = 0;
-          var count = 0;
-          for (item in body.items) {
-              console.log(body.items[item]);
-              popularityAvg += parseInt(body.items[item].popularity);
-              count++;
-          }
-          console.log("Popularity Avg: ");
-          console.log(popularityAvg / count);
-        });
-
+          // use the access token to access the Spotify Web API
+          request.get(options, function(error, respose, body) {
+            iterateTopTracks(error, response, body, options);
+          });
         // we can also pass the token to the browser to make requests from there
 
         // res.redirect('/#' +
