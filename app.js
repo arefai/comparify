@@ -71,6 +71,8 @@ var leastPopularTrackName;
 var leastPopularTrackPop = 100;
 var leastPopularTrackArtist;
 
+var top5tracks = [];
+
 var albumCount = {};
 
 
@@ -79,7 +81,7 @@ function iterateTopTracks(options, res) {
     request.get(options, function(error, response, body) {
         console.log(body);
         for (x in body.items) {
-          //console.log(body.items[x].popularity);
+          console.log(body.items[x].popularity);
           sum += body.items[x].popularity;
           total += 1;
           if (body.items[x].album.name in albumCount) {
@@ -103,6 +105,10 @@ function iterateTopTracks(options, res) {
             leastPopularTrackArtist = body.items[x].artists[0].name;
             leastPopularTrackPop = body.items[x].popularity;
           }
+
+          if (top5tracks.length < 5) {
+            top5tracks[top5tracks.length] = body.items[x].name;
+          }
         }
         options.url = body.next;
         iterateTopTracks(options, res)
@@ -124,9 +130,11 @@ function iterateTopTracks(options, res) {
       mostPopularTrackArtist : mostPopularTrackArtist,
       leastPopularTrack : leastPopularTrackName,
       leastPopularTrackArtist : leastPopularTrackArtist,
-      mostCommonAlbum : commonAlbum
+      mostCommonAlbum : commonAlbum,
+      top5tracks: top5tracks
     });
     console.log(popularity);
+    console.log(top5tracks);
   }
 }
 
@@ -168,7 +176,7 @@ app.get('/callback', function(req, res) {
 
         //for (var y = 0; y < 1000; y += 50){
           var options = {
-            url: 'https://api.spotify.com/v1/me/top/tracks',
+            url: 'https://api.spotify.com/v1/me/top/tracks?time_range=long_term',
             headers: { 'Authorization': 'Bearer ' + access_token },
             json: true
           };
