@@ -60,17 +60,6 @@ app.get('/login', function(req, res) {
 });
 
 
-function getTopTracks() {
-  var options = {
-      url: 'https://api.spotify.com/v1/me/top/tracks',
-      headers: { 'Authorization': 'Bearer ' + access_token },
-      json: true
-  }
-  request.get(options, function(error, response, body) {
-    console.log(body);
-  });
-}
-
 var sum = 0;
 var total = 0;
 var popularity = 0;
@@ -135,8 +124,7 @@ function iterateTopTracks(options, res) {
       mostPopularTrackArtist : mostPopularTrackArtist,
       leastPopularTrack : leastPopularTrackName,
       leastPopularTrackArtist : leastPopularTrackArtist,
-      mostCommonAlbum : commonAlbum,
-      topTracks : getTopTracks()
+      mostCommonAlbum : commonAlbum
     });
     console.log(popularity);
   }
