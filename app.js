@@ -71,8 +71,8 @@ var leastPopularTrackArtist;
 
 function iterateTopTracks(options, res) {
   if (options.url) {
-    request.get(options, function(error, respose, body) {
-        console.log(options.url);
+    request.get(options, function(error, response, body) {
+        console.log(body);
         for (x in body.items) {
           //console.log(body.items[x].popularity);
           sum += body.items[x].popularity;
@@ -88,7 +88,7 @@ function iterateTopTracks(options, res) {
             leastPopularTrackArtist = body.items[x].artists[0].name;
             leastPopularTrackPop = body.items[x].popularity;
           }
-        }  
+        }
         options.url = body.next;
         iterateTopTracks(options, res)
     });
@@ -99,7 +99,7 @@ function iterateTopTracks(options, res) {
       popularity: popularity,
       mostPopularTrack : mostPopularTrackName,
       mostPopularTrackArtist : mostPopularTrackArtist,
-      leastPopularTrack : leastPopularTrackName, 
+      leastPopularTrack : leastPopularTrackName,
       leastPopularTrackArtist : leastPopularTrackArtist
     });
     console.log(popularity);
@@ -140,7 +140,7 @@ app.get('/callback', function(req, res) {
 
         var access_token = body.access_token,
             refresh_token = body.refresh_token;
-        
+
         //for (var y = 0; y < 1000; y += 50){
           var options = {
             url: 'https://api.spotify.com/v1/me/top/tracks',

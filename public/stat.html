@@ -3,32 +3,44 @@
 <head>
     <title>Statify</title>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
-
+    <style>
+        .row {
+            padding-bottom: 10px;
+        }
+    </style>
+</head>
+<body class="bg-light">
     <nav class="navbar navbar-inverse bg-inverse navbar-static-top">
         <h1 class="navbar-text" style="color:#1db954">
             Statify
         </h1>
     </nav>
-</head>
-<body class="bg-light">
-    <div class="pagination-centered">
-        <h5>Your Stats</h5>
-        <div class="container">
-            <div class="row">
-                <div class="col-sm">Popularity Scale (out of 100)</div>
-                <div class="col-sm"><%= popularity %></div>
+    <div class="container-fluid">
+        <div class="col-sm-8" style="left: 18%;">
+            <div class="panel panel-default">
+              <div class="panel-heading" style="background-color: #222 !important; color: #1db954;">
+                  <strong>Your Stats</strong>
+              </div>
+              <div class="panel-body">
+                  <div class="container col-sm-10" style="left: 18%">
+                      <div class="row">
+                          <div class="col-sm-5"><strong>Popularity Scale (out of 100):</strong></div>
+                          <div class="col-sm-2"><%= popularity %></div>
+                      </div>
+                      <div class="row">
+                          <div class="col-sm-5"><strong>Top Track that was Most Popular:</strong></div>
+                          <div class="col-sm-6"><%= mostPopularTrack %> by <%= mostPopularTrackArtist %></div>
+                      </div>
+                      <div class="row">
+                          <div class="col-sm-5"><strong>Top Track that was Least Popular:</strong></div>
+                          <div class="col-sm-6"><%= leastPopularTrack %> by <%= leastPopularTrackArtist %></div>
+                      </div>
+                  </div>
+              </div>
             </div>
-            <div class="container">
-                <div class="col-sm">Top Track that was Most Popular</div>
-                <div class="col-sm"><%= mostPopularTrack %> by <%= mostPopularTrackArtist %></div>
-            </div>
-            <div class="container">
-                <div class="col-sm">Top Track that was Least Popular</div>
-                <div class="col-sm"><%= leastPopularTrack %> by <%= leastPopularTrackArtist %></div>
-            </div>            
         </div>
     </div>
+
 </body>
 
 </html>
-
