@@ -9,11 +9,21 @@
         }
     </style>
 </head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript">
+    $(document).on("click", "#logout-link", function () {
+        window.location = "../";
+    });
+
+</script>
 <body class="bg-light">
     <nav class="navbar navbar-inverse bg-inverse navbar-static-top">
         <h1 class="navbar-text" style="color:#1db954">
             Statify
         </h1>
+        <div class="navbar-text pull-right">
+        <a id="logout-link" target="_blank" href="https://www.spotify.com/us/logout" style="text-decoration: none; color: #1db954">Logout</a>
+        </div>
     </nav>
     <div class="container-fluid">
         <div class="col-sm-8" style="left: 18%;">
@@ -34,6 +44,10 @@
                       <div class="row">
                           <div class="col-sm-5"><strong>Top Track that was Least Popular:</strong></div>
                           <div class="col-sm-6"><%= leastPopularTrack %> by <%= leastPopularTrackArtist %></div>
+                      </div>
+                      <div class="row">
+                          <div class="col-sm-5"><strong>Most Common Album in Your Top Tracks:</strong></div>
+                          <div class="col-sm-6"><%= mostCommonAlbum.album %> by <%= mostCommonAlbum.artist %> (<%= mostCommonAlbum.count %> time(s))</div>
                       </div>
                   </div>
               </div>

@@ -58,6 +58,19 @@ app.get('/login', function(req, res) {
       state: state
     }));
 });
+
+
+function getTopTracks() {
+  var options = {
+      url: 'https://api.spotify.com/v1/me/top/tracks',
+      headers: { 'Authorization': 'Bearer ' + access_token },
+      json: true
+  }
+  request.get(options, function(error, response, body) {
+    console.log(body);
+  });
+}
+
 var sum = 0;
 var total = 0;
 var popularity = 0;
@@ -69,6 +82,9 @@ var leastPopularTrackName;
 var leastPopularTrackPop = 100;
 var leastPopularTrackArtist;
 
+var albumCount = {};
+
+
 function iterateTopTracks(options, res) {
   if (options.url) {
     request.get(options, function(error, response, body) {
@@ -77,6 +93,16 @@ function iterateTopTracks(options, res) {
           //console.log(body.items[x].popularity);
           sum += body.items[x].popularity;
           total += 1;
+          if (body.items[x].album.name in albumCount) {
+            albumCount[body.items[x].album.name].count += 1;
+          }
+          else {
+            albumCount[body.items[x].album.name] = {
+              album : body.items[x].album.name,
+              artist : body.items[x].artists[0].name,
+              count : 1
+            }
+          }
           if (body.items[x].popularity > mostPopularTrackPop) {
             mostPopularTrackName = body.items[x].name;
             mostPopularTrackArtist = body.items[x].artists[0].name;
@@ -95,16 +121,27 @@ function iterateTopTracks(options, res) {
   }
   else {
     popularity =  sum / total;
+    var commonAlbum;
+    var maxAlbumCount = 0;
+    for (key in albumCount) {
+      if (albumCount[key].count > maxAlbumCount) {
+        commonAlbum = albumCount[key];
+        maxAlbumCount = albumCount[key].count;
+      }
+    }
     res.render('stat.html', {
       popularity: popularity,
       mostPopularTrack : mostPopularTrackName,
       mostPopularTrackArtist : mostPopularTrackArtist,
       leastPopularTrack : leastPopularTrackName,
-      leastPopularTrackArtist : leastPopularTrackArtist
+      leastPopularTrackArtist : leastPopularTrackArtist,
+      mostCommonAlbum : commonAlbum,
+      topTracks : getTopTracks()
     });
     console.log(popularity);
   }
 }
+
 
 app.get('/callback', function(req, res) {
 
