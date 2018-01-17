@@ -84,7 +84,23 @@
                       </div>
                       <div class="row">
                           <div class="col-sm-5"><strong>Most Common Album in Your Top Tracks:</strong></div>
-                          <div class="col-sm-6"><%= mostCommonAlbum.album %> by <%= mostCommonAlbum.artist %> <%= mostCommonAlbum.count %> time(s)</div>
+                            <div class="col-sm-2"> 
+                            <figure>
+                              <img src="<%= commonAlbumPlayedPhotoURL %>" width="80%" height="80%">
+                            </figure>
+                          </div>
+                          <div class="col-sm-5">
+                            <div class="row">
+                              <div>
+                                <%= mostCommonAlbum.album %>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div>
+                                by <%= mostCommonAlbum.artist %>
+                              </div>
+                            </div>
+                          </div>
                       </div>
                       <div class="row">
                         <div class="col-sm-5"><strong>Top 5 Tracks</strong></div>

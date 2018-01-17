@@ -88,6 +88,7 @@ var averageArtistsPop = 0;
 var albumCount = {};
 var mostPopularTrackPhotoURL; 
 var leastPopularTrackPhotoURL; 
+var commonAlbumPlayedPhotoURL; 
 
 function iterateTopTracks(options, res) {
   if (options.url) {
@@ -104,6 +105,7 @@ function iterateTopTracks(options, res) {
             albumCount[body.items[x].album.name] = {
               album : body.items[x].album.name,
               artist : body.items[x].artists[0].name,
+              image : body.items[x].album.images[0].url,
               count : 1
             }
           }
@@ -136,6 +138,7 @@ function iterateTopTracks(options, res) {
     for (key in albumCount) {
       if (albumCount[key].count > maxAlbumCount) {
         commonAlbum = albumCount[key];
+        commonAlbumPlayedPhotoURL = albumCount[key].image;
         maxAlbumCount = albumCount[key].count;
       }
     }
@@ -183,6 +186,7 @@ function renderPage(res, commonAlbum) {
       mostCommonAlbum : commonAlbum,
       mostPopularTrackPhotoURL : mostPopularTrackPhotoURL,
       leastPopularTrackPhotoURL : leastPopularTrackPhotoURL,
+      commonAlbumPlayedPhotoURL : commonAlbumPlayedPhotoURL,
       topArtists : topArtists,
       top5tracks: top5tracks,
       averageArtists : averageArtistsPop,
@@ -192,6 +196,7 @@ function renderPage(res, commonAlbum) {
     console.log(topArtists);
     console.log(popularity);
     console.log(top5tracks);
+    console.log(commonAlbumPlayedPhotoURL);
 }
 
 app.get('/callback', function(req, res) {
