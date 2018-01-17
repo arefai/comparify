@@ -72,7 +72,8 @@ var leastPopularTrackPop = 100;
 var leastPopularTrackArtist;
 
 var albumCount = {};
-
+var mostPopularTrackPhotoURL; 
+var leastPopularTrackPhotoURL; 
 
 function iterateTopTracks(options, res) {
   if (options.url) {
@@ -96,12 +97,14 @@ function iterateTopTracks(options, res) {
             mostPopularTrackName = body.items[x].name;
             mostPopularTrackArtist = body.items[x].artists[0].name;
             mostPopularTrackPop = body.items[x].popularity;
+            mostPopularTrackPhotoURL = body.items[x].album.images[0].url;
           }
 
           if (body.items[x].popularity < leastPopularTrackPop) {
             leastPopularTrackName = body.items[x].name;
             leastPopularTrackArtist = body.items[x].artists[0].name;
             leastPopularTrackPop = body.items[x].popularity;
+            leastPopularTrackPhotoURL = body.items[x].album.images[0].url;
           }
         }
         options.url = body.next;
@@ -124,7 +127,9 @@ function iterateTopTracks(options, res) {
       mostPopularTrackArtist : mostPopularTrackArtist,
       leastPopularTrack : leastPopularTrackName,
       leastPopularTrackArtist : leastPopularTrackArtist,
-      mostCommonAlbum : commonAlbum
+      mostCommonAlbum : commonAlbum,
+      mostPopularTrackPhotoURL : mostPopularTrackPhotoURL,
+      leastPopularTrackPhotoURL : leastPopularTrackPhotoURL,
     });
     console.log(popularity);
   }
