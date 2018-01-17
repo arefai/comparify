@@ -71,13 +71,23 @@ var leastPopularTrackName;
 var leastPopularTrackPop = 100;
 var leastPopularTrackArtist;
 
+var mostPopularArtist = {
+  name: '',
+  popularity: 0
+}
+
+var leastPopularArtist = {
+  name: '',
+  popularity: 100
+}
 
 var topArtists = [];
 var top5tracks = [];
 var averageArtistsPop = 0;
 
 var albumCount = {};
-
+var mostPopularTrackPhotoURL; 
+var leastPopularTrackPhotoURL; 
 
 function iterateTopTracks(options, res) {
   if (options.url) {
@@ -101,12 +111,14 @@ function iterateTopTracks(options, res) {
             mostPopularTrackName = body.items[x].name;
             mostPopularTrackArtist = body.items[x].artists[0].name;
             mostPopularTrackPop = body.items[x].popularity;
+            mostPopularTrackPhotoURL = body.items[x].album.images[0].url;
           }
 
           if (body.items[x].popularity < leastPopularTrackPop) {
             leastPopularTrackName = body.items[x].name;
             leastPopularTrackArtist = body.items[x].artists[0].name;
             leastPopularTrackPop = body.items[x].popularity;
+            leastPopularTrackPhotoURL = body.items[x].album.images[0].url;
           }
 
           if (top5tracks.length < 5) {
@@ -142,7 +154,15 @@ function iterateTopTracks(options, res) {
       }
 
       for (var item in body.items) {
-        console.log(item);
+        var pop = body.items[item].popularity;
+        if (pop > mostPopularArtist.popularity) {
+          mostPopularArtist.name = body.items[item].name;
+          mostPopularArtist.popularity = pop;
+        }
+        if (pop < leastPopularArtist.popularity) {
+          leastPopularArtist.name = body.items[item].name;
+          leastPopularArtist.popularity = pop;
+        }
         averageArtistsPop += body.items[item].popularity;
       }
       averageArtistsPop = Math.round(averageArtistsPop/body.items.length * 100) / 100;
@@ -161,16 +181,43 @@ function renderPage(res, commonAlbum) {
       leastPopularTrack : leastPopularTrackName,
       leastPopularTrackArtist : leastPopularTrackArtist,
       mostCommonAlbum : commonAlbum,
+      mostPopularTrackPhotoURL : mostPopularTrackPhotoURL,
+      leastPopularTrackPhotoURL : leastPopularTrackPhotoURL,
       topArtists : topArtists,
       top5tracks: top5tracks,
-      averageArtists : averageArtistsPop
-  });
-  console.log(topArtists);
+      averageArtists : averageArtistsPop,
+      mostPopularArtist : mostPopularArtist,
+      leastPopularArtist : leastPopularArtist
+    });
+    console.log(topArtists);
     console.log(popularity);
     console.log(top5tracks);
 }
 
 app.get('/callback', function(req, res) {
+
+  sum = 0;
+  total = 0;
+  popularity = 0;
+  mostPopularTrackPop = 0;
+
+  leastPopularTrackPop = 100;
+  
+  mostPopularArtist = {
+    name: '',
+    popularity: 0
+  }
+
+  leastPopularArtist = {
+    name: '',
+    popularity: 100
+  }
+
+  topArtists = [];
+  top5tracks = [];
+  averageArtistsPop = 0;
+
+  albumCount = {};
 
   // your application requests refresh and access tokens
   // after checking the state parameter
