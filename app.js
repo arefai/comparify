@@ -59,7 +59,7 @@ app.get('/login', function(req, res) {
     }));
 });
 
-
+var access_token;
 var sum = 0;
 var total = 0;
 var popularity = 0;
@@ -71,6 +71,20 @@ var leastPopularTrackName;
 var leastPopularTrackPop = 100;
 var leastPopularTrackArtist;
 
+var mostPopularArtist = {
+  name: '',
+  popularity: 0
+}
+
+var leastPopularArtist = {
+  name: '',
+  popularity: 100
+}
+
+var topArtists = [];
+var top5tracks = [];
+var averageArtistsPop = 0;
+
 var albumCount = {};
 var mostPopularTrackPhotoURL; 
 var leastPopularTrackPhotoURL; 
@@ -80,7 +94,7 @@ function iterateTopTracks(options, res) {
     request.get(options, function(error, response, body) {
         console.log(body);
         for (x in body.items) {
-          //console.log(body.items[x].popularity);
+          console.log(body.items[x].popularity);
           sum += body.items[x].popularity;
           total += 1;
           if (body.items[x].album.name in albumCount) {
@@ -106,13 +120,17 @@ function iterateTopTracks(options, res) {
             leastPopularTrackPop = body.items[x].popularity;
             leastPopularTrackPhotoURL = body.items[x].album.images[0].url;
           }
+
+          if (top5tracks.length < 5) {
+            top5tracks[top5tracks.length] = body.items[x].name;
+          }
         }
         options.url = body.next;
         iterateTopTracks(options, res)
     });
   }
   else {
-    popularity =  sum / total;
+    popularity =  Math.round(sum / total * 100) / 100;
     var commonAlbum;
     var maxAlbumCount = 0;
     for (key in albumCount) {
@@ -121,7 +139,42 @@ function iterateTopTracks(options, res) {
         maxAlbumCount = albumCount[key].count;
       }
     }
-    res.render('stat.html', {
+
+    var authHead = "Bearer " + access_token;
+    var optionsArtist = {
+      url: 'https://api.spotify.com/v1/me/top/artists',
+      headers: { 'Authorization': authHead },
+      json: true
+    }
+
+    request.get(optionsArtist, function(error, response, body) {
+      topArtists = []
+      for (var i = 0; i < 5; i++) {
+        topArtists.push(body.items[i].name);
+      }
+
+      for (var item in body.items) {
+        var pop = body.items[item].popularity;
+        if (pop > mostPopularArtist.popularity) {
+          mostPopularArtist.name = body.items[item].name;
+          mostPopularArtist.popularity = pop;
+        }
+        if (pop < leastPopularArtist.popularity) {
+          leastPopularArtist.name = body.items[item].name;
+          leastPopularArtist.popularity = pop;
+        }
+        averageArtistsPop += body.items[item].popularity;
+      }
+      averageArtistsPop = Math.round(averageArtistsPop/body.items.length * 100) / 100;
+
+      renderPage(res, commonAlbum);
+    });
+
+  }
+}
+
+function renderPage(res, commonAlbum) {
+  res.render('stat.html', {
       popularity: popularity,
       mostPopularTrack : mostPopularTrackName,
       mostPopularTrackArtist : mostPopularTrackArtist,
@@ -130,11 +183,16 @@ function iterateTopTracks(options, res) {
       mostCommonAlbum : commonAlbum,
       mostPopularTrackPhotoURL : mostPopularTrackPhotoURL,
       leastPopularTrackPhotoURL : leastPopularTrackPhotoURL,
+      topArtists : topArtists,
+      top5tracks: top5tracks,
+      averageArtists : averageArtistsPop,
+      mostPopularArtist : mostPopularArtist,
+      leastPopularArtist : leastPopularArtist
     });
+    console.log(topArtists);
     console.log(popularity);
-  }
+    console.log(top5tracks);
 }
-
 
 app.get('/callback', function(req, res) {
 
@@ -168,7 +226,7 @@ app.get('/callback', function(req, res) {
     request.post(authOptions, function(error, response, body) {
       if (!error && response.statusCode === 200) {
 
-        var access_token = body.access_token,
+            access_token = body.access_token,
             refresh_token = body.refresh_token;
 
         //for (var y = 0; y < 1000; y += 50){

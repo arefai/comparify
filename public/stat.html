@@ -3,7 +3,13 @@
 <head>
     <title>Statify</title>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
     <style>
+        body {
+            font-family: 'Montserrat';
+            background-image: url("/images/bg.jpg");
+            background-size: 100%;
+        }
         .row {
             padding-bottom: 10px;
         }
@@ -14,28 +20,27 @@
     $(document).on("click", "#logout-link", function () {
         window.location = "../";
     });
-
 </script>
 <body class="bg-light">
-    <nav class="navbar navbar-inverse bg-inverse navbar-static-top">
-        <h1 class="navbar-text" style="color:#1db954">
-            Statify
-        </h1>
-        <div class="navbar-text pull-right">
-        <a id="logout-link" target="_blank" href="https://www.spotify.com/us/logout" style="text-decoration: none; color: #1db954">Logout</a>
+    <nav class="navbar navbar-static-top" style="background-color: Transparent">
+        <div class="col-sm-2" style="left: 43%;">
+            <h1 class="navbar-text" style="color: white;">Statify</h1>
+        </div>
+        <div class="navbar-text pull-right" style="margin-top: 25px;">
+            <a id="logout-link" target="_target" href="https://www.spotify.com/us/logout" style="text-decoration: none; color: white;">Logout</a>
         </div>
     </nav>
     <div class="container-fluid">
         <div class="col-sm-8" style="left: 18%;">
             <div class="panel panel-default">
-              <div class="panel-heading" style="background-color: #222 !important; color: #1db954;">
-                  <strong>Your Stats</strong>
+              <div class="panel-heading">
+                  <h5>Your Stats</h5>
               </div>
               <div class="panel-body">
                   <div class="container col-sm-10" style="left: 18%">
                       <div class="row">
-                          <div class="col-sm-5"><strong>Popularity Scale (out of 100):</strong></div>
-                          <div class="col-sm-2"><%= popularity %></div>
+                          <div class="col-sm-5"><strong>Popularity Scale:</strong></div>
+                          <div class="col-sm-2"><%= popularity %> / 100</div>
                       </div>
                       <div class="row">
                           <div class="col-sm-5"><strong>Top Track that was Most Popular:</strong></div>
@@ -79,7 +84,39 @@
                       </div>
                       <div class="row">
                           <div class="col-sm-5"><strong>Most Common Album in Your Top Tracks:</strong></div>
-                          <div class="col-sm-6"><%= mostCommonAlbum.album %> by <%= mostCommonAlbum.artist %> (<%= mostCommonAlbum.count %> time(s))</div>
+                          <div class="col-sm-6"><%= mostCommonAlbum.album %> by <%= mostCommonAlbum.artist %> <%= mostCommonAlbum.count %> time(s)</div>
+                      </div>
+                      <div class="row">
+                        <div class="col-sm-5"><strong>Top 5 Tracks</strong></div>
+                        <div class="col-sm-6">
+                          <ul style="padding-left: 0">
+                          <% for(var i=0; i < top5tracks.length; i++) {%>
+                             <li><%= top5tracks[i] %></li>
+                          <% } %>
+                          </ul>
+                        </div>
+                      </div>
+                      <div class="row">
+                          <div class="col-sm-5"><strong>Average Artists Popularity:</strong></div>
+                          <div class="col-sm-2"><%= averageArtists %> / 100</div>
+                      </div>
+                      <div class="row">
+                          <div class="col-sm-5"><strong>Top Artist that was Most Popular:</strong></div>
+                          <div class="col-sm-6"><%= mostPopularArtist.name %></div>
+                      </div>
+                        <div class="row">
+                          <div class="col-sm-5"><strong>Top Artist that was Least Popular:</strong></div>
+                          <div class="col-sm-6"><%= leastPopularArtist.name %></div>
+                      </div>
+                      <div class="row">
+                        <div class="col-sm-5"><strong>Top 5 Artists</strong></div>
+                        <div class="col-sm-6">
+                          <ul style="padding-left: 0">
+                          <% for(var i=0; i < topArtists.length; i++) {%>
+                             <li><%= topArtists[i] %></li>
+                          <% } %>
+                          </ul>
+                        </div>
                       </div>
                   </div>
               </div>
