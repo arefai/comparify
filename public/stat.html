@@ -3,7 +3,13 @@
 <head>
     <title>Statify</title>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
     <style>
+        body {
+            font-family: 'Montserrat';
+            background-image: url("/images/bg.jpg");
+            background-size: 100%;
+        }
         .row {
             padding-bottom: 10px;
         }
@@ -14,22 +20,21 @@
     $(document).on("click", "#logout-link", function () {
         window.location = "../";
     });
-
 </script>
 <body class="bg-light">
-    <nav class="navbar navbar-inverse bg-inverse navbar-static-top">
-        <h1 class="navbar-text" style="color:#1db954">
-            Statify
-        </h1>
-        <div class="navbar-text pull-right">
-        <a id="logout-link" target="_blank" href="https://www.spotify.com/us/logout" style="text-decoration: none; color: #1db954">Logout</a>
+    <nav class="navbar navbar-static-top" style="background-color: Transparent">
+        <div class="col-sm-2" style="left: 43%;">
+            <h1 class="navbar-text" style="color: white;">Statify</h1>
+        </div>
+        <div class="navbar-text pull-right" style="margin-top: 25px;">
+            <a id="logout-link" target="_target" href="https://www.spotify.com/us/logout" style="text-decoration: none; color: white;">Logout</a>
         </div>
     </nav>
     <div class="container-fluid">
         <div class="col-sm-8" style="left: 18%;">
             <div class="panel panel-default">
-              <div class="panel-heading" style="background-color: #222 !important; color: #1db954;">
-                  <strong>Your Stats</strong>
+              <div class="panel-heading">
+                  <h5>Your Stats</h5>
               </div>
               <div class="panel-body">
                   <div class="container col-sm-10" style="left: 18%">

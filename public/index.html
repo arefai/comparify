@@ -2,20 +2,30 @@
 <html>
   <head>
     <title>Statify - Login</title>
-    <nav class="navbar navbar-inverse bg-inverse navbar-static-top">
-        <h1 class="navbar-text" style="color:#1db954">
-            Statify
-        </h1>
-    </nav>
+    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
-  </head>
+    <style>
+        body {
+            font-family: 'Montserrat';
+            background-image: url("images/bg.jpg");
+            background-size: 100%;
+        }
 
+        .btn:hover {
+            box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+        }
+    </style>
+  </head>
   <body>
+    <nav class="navbar navbar-static-top" style="background-color: Transparent">
+        <div class="col-sm-2" style="left: 43%;">
+            <h1 class="navbar-text" style="color: white;">Statify</h1>
+        </div>
+    </nav>
     <div class="container mx-auto" style="width: auto;">
-      <div id="login">
-        <a href="/login" class="btn btn-primary">Log in with Spotify</a>
+      <div class="col-sm-6" id="login" style="left: 42.5%; top: 45%;">
+        <a href="/login" class="btn" style="background-color: Transparent; border-color: white; color: white; left">Log in with Spotify</a>
       </div>
     </div>
   </body>
 </html>
-
