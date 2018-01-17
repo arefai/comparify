@@ -59,7 +59,7 @@ app.get('/login', function(req, res) {
     }));
 });
 
-
+var access_token;
 var sum = 0;
 var total = 0;
 var popularity = 0;
@@ -71,7 +71,10 @@ var leastPopularTrackName;
 var leastPopularTrackPop = 100;
 var leastPopularTrackArtist;
 
+
+var topArtists = [];
 var top5tracks = [];
+var averageArtistsPop = 0;
 
 var albumCount = {};
 
@@ -115,7 +118,7 @@ function iterateTopTracks(options, res) {
     });
   }
   else {
-    popularity =  sum / total;
+    popularity =  Math.round(sum / total * 100) / 100;
     var commonAlbum;
     var maxAlbumCount = 0;
     for (key in albumCount) {
@@ -124,20 +127,48 @@ function iterateTopTracks(options, res) {
         maxAlbumCount = albumCount[key].count;
       }
     }
-    res.render('stat.html', {
+
+    var authHead = "Bearer " + access_token;
+    var optionsArtist = {
+      url: 'https://api.spotify.com/v1/me/top/artists',
+      headers: { 'Authorization': authHead },
+      json: true
+    }
+
+    request.get(optionsArtist, function(error, response, body) {
+      topArtists = []
+      for (var i = 0; i < 5; i++) {
+        topArtists.push(body.items[i].name);
+      }
+
+      for (var item in body.items) {
+        console.log(item);
+        averageArtistsPop += body.items[item].popularity;
+      }
+      averageArtistsPop = Math.round(averageArtistsPop/body.items.length * 100) / 100;
+
+      renderPage(res, commonAlbum);
+    });
+
+  }
+}
+
+function renderPage(res, commonAlbum) {
+  res.render('stat.html', {
       popularity: popularity,
       mostPopularTrack : mostPopularTrackName,
       mostPopularTrackArtist : mostPopularTrackArtist,
       leastPopularTrack : leastPopularTrackName,
       leastPopularTrackArtist : leastPopularTrackArtist,
       mostCommonAlbum : commonAlbum,
-      top5tracks: top5tracks
-    });
+      topArtists : topArtists,
+      top5tracks: top5tracks,
+      averageArtists : averageArtistsPop
+  });
+  console.log(topArtists);
     console.log(popularity);
     console.log(top5tracks);
-  }
 }
-
 
 app.get('/callback', function(req, res) {
 
@@ -171,7 +202,7 @@ app.get('/callback', function(req, res) {
     request.post(authOptions, function(error, response, body) {
       if (!error && response.statusCode === 200) {
 
-        var access_token = body.access_token,
+            access_token = body.access_token,
             refresh_token = body.refresh_token;
 
         //for (var y = 0; y < 1000; y += 50){
