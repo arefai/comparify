@@ -196,7 +196,6 @@ function renderPage(res, commonAlbum) {
     console.log(topArtists);
     console.log(popularity);
     console.log(top5tracks);
-    console.log(commonAlbumPlayedPhotoURL);
 }
 
 app.get('/callback', function(req, res) {
