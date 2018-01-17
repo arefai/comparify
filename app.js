@@ -71,7 +71,10 @@ var leastPopularTrackName;
 var leastPopularTrackPop = 100;
 var leastPopularTrackArtist;
 
+
 var topArtists = [];
+var top5tracks = [];
+var averageArtistsPop = 0;
 
 var albumCount = {};
 
@@ -81,7 +84,7 @@ function iterateTopTracks(options, res) {
     request.get(options, function(error, response, body) {
         console.log(body);
         for (x in body.items) {
-          //console.log(body.items[x].popularity);
+          console.log(body.items[x].popularity);
           sum += body.items[x].popularity;
           total += 1;
           if (body.items[x].album.name in albumCount) {
@@ -105,13 +108,17 @@ function iterateTopTracks(options, res) {
             leastPopularTrackArtist = body.items[x].artists[0].name;
             leastPopularTrackPop = body.items[x].popularity;
           }
+
+          if (top5tracks.length < 5) {
+            top5tracks[top5tracks.length] = body.items[x].name;
+          }
         }
         options.url = body.next;
         iterateTopTracks(options, res)
     });
   }
   else {
-    popularity =  sum / total;
+    popularity =  Math.round(sum / total * 100) / 100;
     var commonAlbum;
     var maxAlbumCount = 0;
     for (key in albumCount) {
@@ -127,20 +134,26 @@ function iterateTopTracks(options, res) {
       headers: { 'Authorization': authHead },
       json: true
     }
-    
-    console.log("Artists.....");
+
     request.get(optionsArtist, function(error, response, body) {
-      for (var i = 0; i < body.items; i++) {
-        topArtists.append(body.items[x].name);
+      topArtists = []
+      for (var i = 0; i < 5; i++) {
+        topArtists.push(body.items[i].name);
       }
 
-      renderPage();
+      for (var item in body.items) {
+        console.log(item);
+        averageArtistsPop += body.items[item].popularity;
+      }
+      averageArtistsPop = Math.round(averageArtistsPop/body.items.length * 100) / 100;
+
+      renderPage(res, commonAlbum);
     });
 
   }
 }
 
-def renderPage() {
+function renderPage(res, commonAlbum) {
   res.render('stat.html', {
       popularity: popularity,
       mostPopularTrack : mostPopularTrackName,
@@ -148,8 +161,13 @@ def renderPage() {
       leastPopularTrack : leastPopularTrackName,
       leastPopularTrackArtist : leastPopularTrackArtist,
       mostCommonAlbum : commonAlbum,
-      topArtists : topArtists
+      topArtists : topArtists,
+      top5tracks: top5tracks,
+      averageArtists : averageArtistsPop
   });
+  console.log(topArtists);
+    console.log(popularity);
+    console.log(top5tracks);
 }
 
 app.get('/callback', function(req, res) {
@@ -189,7 +207,7 @@ app.get('/callback', function(req, res) {
 
         //for (var y = 0; y < 1000; y += 50){
           var options = {
-            url: 'https://api.spotify.com/v1/me/top/tracks',
+            url: 'https://api.spotify.com/v1/me/top/tracks?time_range=long_term',
             headers: { 'Authorization': 'Bearer ' + access_token },
             json: true
           };
