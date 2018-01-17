@@ -176,7 +176,7 @@ app.get('/callback', function(req, res) {
 
         //for (var y = 0; y < 1000; y += 50){
           var options = {
-            url: 'https://api.spotify.com/v1/me/top/tracks?time_range=long_term',
+            url: 'https://api.spotify.com/v1/me/top/tracks',
             headers: { 'Authorization': 'Bearer ' + access_token },
             json: true
           };
