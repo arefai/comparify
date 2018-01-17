@@ -32,11 +32,11 @@
     </nav>
     <div class="container-fluid">
         <div class="col-sm-8" style="left: 18%;">
-            <div class="panel panel-default">
-              <div class="panel-heading">
-                  <h5>Your Stats</h5>
+            <div class="panel" style="background-color: rgba(0, 0, 0, 0.35); border-color: white;">
+              <div class="panel-heading" style="color: white;">
+                  <h5 style="margin-left: 43%;">Your Stats</h5>
               </div>
-              <div class="panel-body">
+              <div class="panel-body" style="color: white;">
                   <div class="container col-sm-10" style="left: 18%">
                       <div class="row">
                           <div class="col-sm-5"><strong>Popularity Scale:</strong></div>
@@ -118,11 +118,11 @@
                       </div>
                       <div class="row">
                           <div class="col-sm-5"><strong>Top Artist that was Most Popular:</strong></div>
-                          <div class="col-sm-6"><%= mostPopularArtist.name %></div>
+                          <div class="col-sm-6"><%= mostPopularArtist.name %> (<%= mostPopularArtist.popularity %> / 100)</div>
                       </div>
                         <div class="row">
                           <div class="col-sm-5"><strong>Top Artist that was Least Popular:</strong></div>
-                          <div class="col-sm-6"><%= leastPopularArtist.name %></div>
+                          <div class="col-sm-6"><%= leastPopularArtist.name %> (<%= leastPopularArtist.popularity %> / 100)</div>
                       </div>
                       <div class="row">
                         <div class="col-sm-5"><strong>Top 5 Artists</strong></div>

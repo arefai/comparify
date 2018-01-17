@@ -201,6 +201,29 @@ function renderPage(res, commonAlbum) {
 
 app.get('/callback', function(req, res) {
 
+  sum = 0;
+  total = 0;
+  popularity = 0;
+  mostPopularTrackPop = 0;
+
+  leastPopularTrackPop = 100;
+  
+  mostPopularArtist = {
+    name: '',
+    popularity: 0
+  }
+
+  leastPopularArtist = {
+    name: '',
+    popularity: 100
+  }
+
+  topArtists = [];
+  top5tracks = [];
+  averageArtistsPop = 0;
+
+  albumCount = {};
+
   // your application requests refresh and access tokens
   // after checking the state parameter
 
