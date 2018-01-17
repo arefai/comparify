@@ -71,6 +71,15 @@ var leastPopularTrackName;
 var leastPopularTrackPop = 100;
 var leastPopularTrackArtist;
 
+var mostPopularArtist = {
+  name: '',
+  popularity: 0
+}
+
+var leastPopularArtist = {
+  name: '',
+  popularity: 100
+}
 
 var topArtists = [];
 var top5tracks = [];
@@ -142,7 +151,15 @@ function iterateTopTracks(options, res) {
       }
 
       for (var item in body.items) {
-        console.log(item);
+        var pop = body.items[item].popularity;
+        if (pop > mostPopularArtist.popularity) {
+          mostPopularArtist.name = body.items[item].name;
+          mostPopularArtist.popularity = pop;
+        }
+        if (pop < leastPopularArtist.popularity) {
+          leastPopularArtist.name = body.items[item].name;
+          leastPopularArtist.popularity = pop;
+        }
         averageArtistsPop += body.items[item].popularity;
       }
       averageArtistsPop = Math.round(averageArtistsPop/body.items.length * 100) / 100;
@@ -163,7 +180,9 @@ function renderPage(res, commonAlbum) {
       mostCommonAlbum : commonAlbum,
       topArtists : topArtists,
       top5tracks: top5tracks,
-      averageArtists : averageArtistsPop
+      averageArtists : averageArtistsPop,
+      mostPopularArtist : mostPopularArtist,
+      leastPopularArtist : leastPopularArtist
   });
   console.log(topArtists);
     console.log(popularity);
