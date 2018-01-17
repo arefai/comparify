@@ -44,11 +44,43 @@
                       </div>
                       <div class="row">
                           <div class="col-sm-5"><strong>Top Track that was Most Popular:</strong></div>
-                          <div class="col-sm-6"><%= mostPopularTrack %> by <%= mostPopularTrackArtist %></div>
+                          <div class="col-sm-2"> 
+                            <figure>
+                              <img src="<%= mostPopularTrackPhotoURL %>" width="80%" height="80%">
+                            </figure>
+                          </div>
+                          <div class="col-sm-5">
+                            <div class="row">
+                              <div>
+                                <%= mostPopularTrack %>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div>
+                                by <%= mostPopularTrackArtist %>
+                              </div>
+                            </div>
+                          </div>
                       </div>
                       <div class="row">
                           <div class="col-sm-5"><strong>Top Track that was Least Popular:</strong></div>
-                          <div class="col-sm-6"><%= leastPopularTrack %> by <%= leastPopularTrackArtist %></div>
+                            <div class="col-sm-2"> 
+                            <figure>
+                              <img src="<%= leastPopularTrackPhotoURL %>" width="80%" height="80%">
+                            </figure>
+                          </div>
+                          <div class="col-sm-5">
+                            <div class="row">
+                              <div>
+                                <%= leastPopularTrack %>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div>
+                                by <%= leastPopularTrackArtist %>
+                              </div>
+                            </div>
+                          </div>
                       </div>
                       <div class="row">
                           <div class="col-sm-5"><strong>Most Common Album in Your Top Tracks:</strong></div>
